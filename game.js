@@ -32,7 +32,7 @@ function main() {
         } 
     }
 
-    //winResize();
+    winResize();
 }
 
 function winResize() {
@@ -44,6 +44,7 @@ function winResize() {
                 rule.style["width"] = winSize * 0.18 + "px";
                 rule.style["height"] = winSize * 0.18 + "px";
                 rule.style["padding"] = winSize * 0.03 + "px";
+                
             } 
             else if (rule.selectorText == ".minorBox") {
                 rule.style["width"] = winSize * 0.06 + "px";

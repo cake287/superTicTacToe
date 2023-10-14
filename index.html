@@ -5,12 +5,26 @@
     <script src = "game.js"></script>
     <style>
 
+body {
+    padding: 0;
+    font-family: sans-serif;
+}
+
+#title {
+    text-align: center;
+    font-size: 3em;
+}
+
 #gameContainer {
     display: grid;
     grid-template-columns: auto auto auto;
     width: 72vmin;
     height: 72vmin;
-    margin: auto;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .majorBox {
@@ -21,15 +35,28 @@
     grid-template-columns: auto auto auto;
 
 }
+.majorBox.disabled {
+    opacity: 0.4;
+}
+.majorBox.gameOver {
+    opacity: 0.4;
+}
 
 .minorBox {
-    width: 25px;
-    height: 25px;
-
     border: 0 solid black;
+    text-align: center;
+    font-weight: bold;
 }
-.minorBox:hover {
-    background-color: rgb(200, 200, 200);
+
+.majorBox:not(.disabled) > .minorBox:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.cross {
+    color: blue;
+}
+.circle {
+    color: orange;
 }
 
     </style>
@@ -39,9 +66,9 @@
 
 <body>
 
-<div style = "width: 100%; height: 100%;">
+<h1 id = "title">Super Tic Tac Toe</h1>
+
 <div id = "gameContainer"></div>
-</div>
 
 </body>
 

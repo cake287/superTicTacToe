@@ -37,9 +37,16 @@ function boxClick(majorIndex, minorIndex) {
         thisMajor.dataset.value == " " && // if this mini game hasn't been won yet
         thisMinor.dataset.value == " ") 
         {
-        thisMinor.classList.add(isTurnCrosses ? "cross" : "circle");
-        thisMinor.dataset.value = isTurnCrosses ? "X" : "O";
-        thisMinor.innerHTML = isTurnCrosses ? crossChar : circleChar;
+        let svg = thisMinor.querySelector("svg");
+        if (isTurnCrosses) {
+            thisMinor.classList.add("cross");
+            thisMinor.dataset.value = "X";
+            
+        } else {
+            thisMinor.classList.add("circle");
+            thisMinor.dataset.value = "O";
+            thisMinor.innerHTML = circleChar;
+        }
         
         thisMajor.dataset.value = testGameWin(boxes[majorIndex].minors);
         if (thisMajor.dataset.value != " ") 
@@ -67,18 +74,7 @@ function boxClick(majorIndex, minorIndex) {
     }
 }
 
-// let darkTheme = false;
 function main() {
-    // let title = document.getElementById("title");
-    // title.addEventListener("click", function (_) {
-    //     darkTheme = !darkTheme; 
-    //     for (let i = 0; i < document.styleSheets.length; i++)
-    //         for (let rule of document.styleSheets[i].cssRules)
-    //             if (rule.selectorText == ".majorBox" || rule.selectorText == ".minorBox") {
-                    
-    //             }
-    // });
-
     let gameContainer = document.getElementById("gameContainer");
     for (let i = 0; i < 9; i++) {
         boxes.push({major: document.createElement("div"), minors: []});
@@ -105,6 +101,21 @@ function main() {
             boxes[i].minors[j].classList.add("minorBox");
             boxes[i].major.appendChild(boxes[i].minors[j]);
 
+            let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("viewbox", "0 0 100 100");
+            svg.setAttribute("stroke", "red");
+            svg.setAttribute("width", "40");
+            svg.setAttribute("height", "40");
+            boxes[i].minors[j].appendChild(svg);
+
+            let circle = document.createElement("circle");
+            circle.setAttribute("cx", "50");
+            circle.setAttribute("cy", "50");
+            circle.setAttribute("r", "40");
+            circle.setAttribute("fill", "red");
+            svg.appendChild(circle);
+
+
 
             boxes[i].minors[j].style.borderWidth = borderExists[j].map((exists) => (exists) + "px").join(" ");
         
@@ -117,27 +128,28 @@ function main() {
     winResize();
 }
 
-
-
 function winResize() {
     let winSize = Math.min(window.innerWidth, window.innerHeight);
-    //console.log(winSize);
     for (let i = 0; i < document.styleSheets.length; i++)
-        for (let rule of document.styleSheets[i].cssRules) {
-            if (rule.selectorText == ".majorBox") {
-                rule.style["width"] = winSize * 0.18 + "px";
-                rule.style["height"] = winSize * 0.18 + "px";
-                rule.style["padding"] = winSize * 0.03 + "px";
-                
-            } 
-            else if (rule.selectorText == ".minorBox") {
-                let size = winSize * 0.06 + "px";
-                rule.style["width"] = size;
-                rule.style["height"] = size;
-                rule.style["line-height"] = size;
-                rule.style["font-size"] = winSize * 0.03 + "px";
+        try {
+            for (let rule of document.styleSheets[i].cssRules) {
+                if (rule.selectorText == ".majorBox") {
+                    rule.style["width"] = winSize * 0.18 + "px";
+                    rule.style["height"] = winSize * 0.18 + "px";
+                    rule.style["padding"] = winSize * 0.03 + "px";
+                    
+                } 
+                else if (rule.selectorText == ".minorBox") {
+                    let size = winSize * 0.06 + "px";
+                    rule.style["width"] = size;
+                    rule.style["height"] = size;
+                    rule.style["line-height"] = size;
+                    rule.style["font-size"] = winSize * 0.03 + "px";
+                }
             }
         }
+        catch (_) {} // i'm sorry. i tried to find another solution. 
+        // if the html document links to any stylesheets, they'll be included in document.styleSheets but CORS will block access and throw an error
 }
 
 

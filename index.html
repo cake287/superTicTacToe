@@ -3,82 +3,16 @@
 
 <head>
     <script src = "game.js"></script>
+
+
     <style>
-@media (prefers-color-scheme: dark) {
-    .majorBox, .minorBox {
-        border: 0px solid white;
-    }
-    body {
-        color: white;
-        background-color: black;
-    }
-}
-@media (prefers-color-scheme: light) {
-    .majorBox, .minorBox {
-        border: 0px solid black;
-    }
-}
-
-
-body {
-    padding: 0;
-    font-family: "Tahoma", sans-serif;
-}
-
-#title {
-    text-align: center;
-    font-size: 3em;
-    font-weight: lighter;
-}
-
-#gameContainer {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    width: 72vmin;
-    height: 72vmin;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
-.majorBox {
-    display: grid;
-    grid-template-columns: auto auto auto;
-}
-.majorBox.disabled {
-    opacity: 0.4;
-}
-.majorBox.gameOver {
-    opacity: 0.4;
-}
-
-.minorBox {
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
-}
-
-#gameContainer.crossTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
-    background-color: rgba(50, 50, 255, 0.3); 
-}
-#gameContainer.circleTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
-    background-color: rgba(255, 183, 50, 0.3);
-}
-
-
-.cross {
-    color:  rgb(50, 50, 255);
-}
-.circle {
-    color: rgb(253, 182, 50);
-}
-
+/* keep these rules in the html document so the js can change sizes on window resize (can't change css file bc CORS) */
+.majorBox { content: "get rid of the warning not to use empty rulesets" }
+.minorBox { content: "" }
     </style>
 
 
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>

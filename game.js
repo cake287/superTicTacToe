@@ -60,6 +60,10 @@ function boxClick(majorIndex, minorIndex) {
         }
 
         isTurnCrosses = !isTurnCrosses;
+
+        let gc = document.getElementById("gameContainer").classList;
+        gc.remove(isTurnCrosses ? "circleTurn" : "crossTurn");
+        gc.add(isTurnCrosses ? "crossTurn" : "circleTurn");
     }
 }
 

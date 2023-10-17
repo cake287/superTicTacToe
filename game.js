@@ -67,7 +67,18 @@ function boxClick(majorIndex, minorIndex) {
     }
 }
 
+// let darkTheme = false;
 function main() {
+    // let title = document.getElementById("title");
+    // title.addEventListener("click", function (_) {
+    //     darkTheme = !darkTheme; 
+    //     for (let i = 0; i < document.styleSheets.length; i++)
+    //         for (let rule of document.styleSheets[i].cssRules)
+    //             if (rule.selectorText == ".majorBox" || rule.selectorText == ".minorBox") {
+                    
+    //             }
+    // });
+
     let gameContainer = document.getElementById("gameContainer");
     for (let i = 0; i < 9; i++) {
         boxes.push({major: document.createElement("div"), minors: []});
@@ -105,6 +116,8 @@ function main() {
 
     winResize();
 }
+
+
 
 function winResize() {
     let winSize = Math.min(window.innerWidth, window.innerHeight);

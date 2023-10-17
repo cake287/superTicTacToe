@@ -4,15 +4,31 @@
 <head>
     <script src = "game.js"></script>
     <style>
+@media (prefers-color-scheme: dark) {
+    .majorBox, .minorBox {
+        border: 0px solid white;
+    }
+    body {
+        color: white;
+        background-color: black;
+    }
+}
+@media (prefers-color-scheme: light) {
+    .majorBox, .minorBox {
+        border: 0px solid black;
+    }
+}
+
 
 body {
     padding: 0;
-    font-family: sans-serif;
+    font-family: "Tahoma", sans-serif;
 }
 
 #title {
     text-align: center;
     font-size: 3em;
+    font-weight: lighter;
 }
 
 #gameContainer {
@@ -27,13 +43,10 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.majorBox {
 
-    border: 0px solid black;
-    
+.majorBox {
     display: grid;
     grid-template-columns: auto auto auto;
-
 }
 .majorBox.disabled {
     opacity: 0.4;
@@ -43,29 +56,24 @@ body {
 }
 
 .minorBox {
-    border: 0 solid black;
+    cursor: pointer;
     text-align: center;
     font-weight: bold;
 }
 
 #gameContainer.crossTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
-    background-color: rgb(210, 210, 255);
+    background-color: rgba(50, 50, 255, 0.3); 
 }
 #gameContainer.circleTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
-    background-color: rgb(255, 243, 220);
+    background-color: rgba(255, 183, 50, 0.3);
 }
-
-/* grey hover */
-/* .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
-    background-color: rgb(220, 220, 220);
-} */
 
 
 .cross {
-    color: blue;
+    color:  rgb(50, 50, 255);
 }
 .circle {
-    color: orange;
+    color: rgb(253, 182, 50);
 }
 
     </style>
@@ -75,7 +83,7 @@ body {
 
 <body>
 
-<!-- <h1 id = "title">Super Tic Tac Toe</h1> -->
+<h1 id = "title">Super Noughts and Crosses</h1>
 
 <div id = "gameContainer" class = "crossTurn"></div>
 

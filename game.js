@@ -38,9 +38,15 @@ function boxClick(majorIndex, minorIndex) {
         thisMinor.dataset.value == " ") 
         {
         let svg = thisMinor.querySelector("svg");
+        // svg.setAttribute("width", "20");
+        // svg.setAttribute("height", "20");
+        
+
+
         if (isTurnCrosses) {
             thisMinor.classList.add("cross");
             thisMinor.dataset.value = "X";
+            //thisMinor.innerHTML = crossChar;
             
         } else {
             thisMinor.classList.add("circle");
@@ -101,19 +107,23 @@ function main() {
             boxes[i].minors[j].classList.add("minorBox");
             boxes[i].major.appendChild(boxes[i].minors[j]);
 
-            let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            svg.setAttribute("viewbox", "0 0 100 100");
-            svg.setAttribute("stroke", "red");
-            svg.setAttribute("width", "40");
-            svg.setAttribute("height", "40");
-            boxes[i].minors[j].appendChild(svg);
+            
+            if (i == 0 && j == 0) {
+                let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("viewbox", "0 0 100 100");
+                svg.setAttribute("stroke", "red");
+                svg.setAttribute("width", "70");
+                svg.setAttribute("height", "70");
+                boxes[i].minors[j].appendChild(svg);
 
-            let circle = document.createElement("circle");
-            circle.setAttribute("cx", "50");
-            circle.setAttribute("cy", "50");
-            circle.setAttribute("r", "40");
-            circle.setAttribute("fill", "red");
-            svg.appendChild(circle);
+                let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", "0");
+                circle.setAttribute("cy", "0");
+                circle.setAttribute("r", "40");
+                circle.setAttribute("fill", "red");
+                svg.appendChild(circle);
+
+            }
 
 
 

@@ -50,15 +50,20 @@ body {
 }
 
 .minorBox {
-    cursor: pointer;
     text-align: center;
     font-weight: bold;
+
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #gameContainer.crossTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
+    cursor: pointer;
     background-color: rgba(50, 50, 255, 0.3); 
 }
 #gameContainer.circleTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
+    cursor: pointer;
     background-color: rgba(255, 183, 50, 0.3);
 }
 
@@ -70,5 +75,6 @@ body {
 }
 
 svg {
-    background-color: white;
+    /* background-color: white; */
+    border: 1px solid black;
 }

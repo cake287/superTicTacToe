@@ -36,17 +36,15 @@ function boxClick(majorIndex, minorIndex) {
         !thisMajor.classList.contains("disabled") && 
         thisMajor.dataset.value == " " && // if this mini game hasn't been won yet
         thisMinor.dataset.value == " ") 
-        {
-        let svg = thisMinor.querySelector("svg");
-        // svg.setAttribute("width", "20");
-        // svg.setAttribute("height", "20");
+    {
         
+
 
 
         if (isTurnCrosses) {
             thisMinor.classList.add("cross");
             thisMinor.dataset.value = "X";
-            //thisMinor.innerHTML = crossChar;
+            thisMinor.innerHTML = crossChar;
             
         } else {
             thisMinor.classList.add("circle");
@@ -106,32 +104,11 @@ function main() {
             boxes[i].minors.push(document.createElement("div"));
             boxes[i].minors[j].classList.add("minorBox");
             boxes[i].major.appendChild(boxes[i].minors[j]);
+            boxes[i].minors[j].style.borderWidth = borderExists[j].map((exists) => (exists) + "px").join(" ");
+            boxes[i].minors[j].dataset.value = " ";
+            boxes[i].minors[j].addEventListener("click", () => { boxClick(i, j )});
 
             
-            if (i == 0 && j == 0) {
-                let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                svg.setAttribute("viewbox", "0 0 100 100");
-                svg.setAttribute("stroke", "red");
-                svg.setAttribute("width", "70");
-                svg.setAttribute("height", "70");
-                boxes[i].minors[j].appendChild(svg);
-
-                let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                circle.setAttribute("cx", "0");
-                circle.setAttribute("cy", "0");
-                circle.setAttribute("r", "40");
-                circle.setAttribute("fill", "red");
-                svg.appendChild(circle);
-
-            }
-
-
-
-            boxes[i].minors[j].style.borderWidth = borderExists[j].map((exists) => (exists) + "px").join(" ");
-        
-            boxes[i].minors[j].dataset.value = " ";
-
-            boxes[i].minors[j].addEventListener("click", () => { boxClick(i, j )});
         } 
     }
 
@@ -139,27 +116,27 @@ function main() {
 }
 
 function winResize() {
-    let winSize = Math.min(window.innerWidth, window.innerHeight);
-    for (let i = 0; i < document.styleSheets.length; i++)
-        try {
-            for (let rule of document.styleSheets[i].cssRules) {
-                if (rule.selectorText == ".majorBox") {
-                    rule.style["width"] = winSize * 0.18 + "px";
-                    rule.style["height"] = winSize * 0.18 + "px";
-                    rule.style["padding"] = winSize * 0.03 + "px";
-                    
-                } 
-                else if (rule.selectorText == ".minorBox") {
-                    let size = winSize * 0.06 + "px";
-                    rule.style["width"] = size;
-                    rule.style["height"] = size;
-                    rule.style["line-height"] = size;
-                    rule.style["font-size"] = winSize * 0.03 + "px";
-                }
-            }
-        }
-        catch (_) {} // i'm sorry. i tried to find another solution. 
-        // if the html document links to any stylesheets, they'll be included in document.styleSheets but CORS will block access and throw an error
+    const winSize = Math.min(window.innerWidth, window.innerHeight);
+    for (const box of document.querySelectorAll(".majorBox")) {
+        box.style.width = winSize * 0.18 + "px";
+        box.style.height = winSize * 0.18 + "px";
+        box.style.padding = winSize * 0.03 + "px"
+    }
+
+    const minorSize = winSize * 0.06 + "px";
+    for (const box of document.querySelectorAll(".minorBox")) {
+        box.style.width = minorSize;
+        box.style.height = minorSize;
+        box.style.lineHeight = minorSize;
+        box.style.fontSize = winSize * 0.03 + "px";
+
+    } 
+
+    for (const svg of document.querySelectorAll(".minorSvg")) {
+        svg.style.width = minorSize;
+        svg.style.height = minorSize;
+    }
+
 }
 
 

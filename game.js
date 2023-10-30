@@ -5,7 +5,7 @@ const crossChar = "\u2573";
 const circleChar = "\u25EF";
 
 // board is a list of boxes (major or minor) 
-// returns "X", "O" or " "
+// returns ["X", lineStartIndex, lineEndIndex], ["O", lineStartIndex, lineEndIndex] or [" "]
 function testGameWin(board) {
     const winningArrangements =
     [
@@ -19,12 +19,12 @@ function testGameWin(board) {
         [2, 4, 6]
     ];
     for (const arr of winningArrangements) {
-        let values = arr.map(i => board[i].dataset.value);
-        let allValuesSame = values.every(v => v == values[0]);
-        if (allValuesSame && values[0] != " ")
-            return values[0];
+        let minorValues = arr.map(i => board[i].dataset.value);
+        let allValuesSame = minorValues.every(v => v == minorValues[0]);
+        if (allValuesSame && minorValues[0] != " ")
+            return [minorValues[0], arr[0], arr[2]];
     }
-    return " ";
+    return [" "];
 }
 
 
@@ -35,26 +35,70 @@ function boxClick(majorIndex, minorIndex) {
     if (
         !thisMajor.classList.contains("disabled") && 
         thisMajor.dataset.value == " " && // if this mini game hasn't been won yet
-        thisMinor.dataset.value == " ") 
+        thisMinor.dataset.value == " ") // if this box in the mini game hasn't been used yet
     {
-        
-
-
-
         if (isTurnCrosses) {
             thisMinor.classList.add("cross");
             thisMinor.dataset.value = "X";
             thisMinor.innerHTML = crossChar;
-            
         } else {
             thisMinor.classList.add("circle");
             thisMinor.dataset.value = "O";
             thisMinor.innerHTML = circleChar;
         }
         
-        thisMajor.dataset.value = testGameWin(boxes[majorIndex].minors);
-        if (thisMajor.dataset.value != " ") 
+        let [gameWinner, lineStartIndex, lineEndIndex] = testGameWin(boxes[majorIndex].minors)
+        if (gameWinner != " ") {
+            thisMajor.dataset.value = gameWinner;
             thisMajor.classList.add("gameOver");
+
+
+
+            let line = document.createElement("div");
+            line.classList.add("gameOverLine");
+            thisMajor.appendChild(line);
+            console.log(lineStartIndex + " " + lineEndIndex);
+
+            let majorRect = thisMajor.getBoundingClientRect();
+            let startingRect = boxes[majorIndex].minors[lineStartIndex].getBoundingClientRect();
+
+            const lineOffset = 10; // pixels between edge of minor and start of line
+
+            line.style.left = "calc(" + (startingRect.left - majorRect.left + startingRect.width / 2 ) + "px - " 
+                  + getComputedStyle(line).width + " / 2 - " +
+                  getComputedStyle(thisMajor).borderLeftWidth + ")";
+
+            line.style.top = "calc(" + (startingRect.top - majorRect.top + lineOffset) + "px - " +
+                  getComputedStyle(thisMajor).borderTopWidth + ")";
+                  
+            let lineLength = 3*startingRect.height - 2*lineOffset;
+            let rot = 0;
+            switch (lineEndIndex - lineStartIndex) {
+                case 2: //horizontal
+                rot = -90;
+                break;
+
+                case 6: //vertical
+                break;
+
+                case 8: // top left - bottom right diagonal
+                rot = -45;
+                lineLength *= Math.sqrt(2);
+                break;
+
+                case 4: // top right - bottom left diagonal
+                rot = 45;
+                lineLength *= Math.sqrt(2);
+                break;
+            }
+
+            line.style.height = lineLength + "px";
+            
+            let orig = "calc(" + getComputedStyle(line).width + " / 2) " + (startingRect.height / 2 - 10) + "px";
+            console.log(orig);
+            line.style.transformOrigin = orig;
+            line.style.transform = "rotate(" + rot + "deg)";
+        }
         
 
         for (let i = 0; i < 9; i++) {
@@ -116,6 +160,8 @@ function main() {
 }
 
 function winResize() {
+    // presumably a better way to do scalable formatting . but it works. pain in the arse tho
+
     const winSize = Math.min(window.innerWidth, window.innerHeight);
     for (const box of document.querySelectorAll(".majorBox")) {
         box.style.width = winSize * 0.18 + "px";
@@ -131,11 +177,6 @@ function winResize() {
         box.style.fontSize = winSize * 0.03 + "px";
 
     } 
-
-    for (const svg of document.querySelectorAll(".minorSvg")) {
-        svg.style.width = minorSize;
-        svg.style.height = minorSize;
-    }
 
 }
 

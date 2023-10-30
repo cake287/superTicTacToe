@@ -1,3 +1,5 @@
+
+
 @media (prefers-color-scheme: dark) {
     .majorBox, .minorBox {
         border: 0px solid white;
@@ -39,14 +41,15 @@ body {
 
 
 .majorBox {
+    position: relative;
     display: grid;
     grid-template-columns: auto auto auto;
 }
 .majorBox.disabled {
-    opacity: 0.4;
+    opacity: 0.5;
 }
 .majorBox.gameOver {
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 .minorBox {
@@ -58,36 +61,63 @@ body {
     user-select: none;
 }
 
-#gameContainer.crossTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
+#gameContainer.crossTurn > .majorBox:not(.disabled):not(.gameOver) > .minorBox:not(.cross):not(.circle):hover {
     cursor: pointer;
     background-color: rgba(50, 50, 255, 0.3); 
 }
-#gameContainer.circleTurn > .majorBox:not(.disabled) > .minorBox:not(.cross):not(.circle):hover {
+#gameContainer.circleTurn > .majorBox:not(.disabled):not(.gameOver) > .minorBox:not(.cross):not(.circle):hover {
     cursor: pointer;
     background-color: rgba(255, 183, 50, 0.3);
 }
 
 .cross {
-    color:  rgb(50, 50, 255);
+    color: rgb(50, 50, 255);
 }
 .circle {
     color: rgb(253, 182, 50);
 }
 
-svg {
-    /* background-color: white; */
-    /* border: 1px solid black; */
-
-    stroke: red;
-    stroke-width: 5%;
+.gameOverLine {
+    width: 8px;
+    background-color: grey;
+    position: absolute;
+    z-index: 1;
+    animation-name: gameOverLineAnim;
+    animation-duration: 0.5s;
 }
 
-.spinner {
+@keyframes gameOverLineAnim {
+    0%   { 
+        height: 0%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/* 
+spinning circle animation
+
+to use: 
+
+<div class = "animCircle">
+    <div><div></div></div>
+    <div><div></div></div>
+</div> 
+*/
+
+.animCircle {
     width: 100px;
     height: 100px;
     position: absolute;
 }
-.spinner::after {
+.animCircle::after {
     width: 100%;
     height: 100%;
     border-radius: 100%;
@@ -99,30 +129,35 @@ svg {
     -webkit-box-sizing: border-box;
 }
 
-.spinner div {
+.animCircle div {
     top: 0;
     width: 50%;
     height: 100%;
     overflow: hidden;
     position: absolute;
 }
-.spinner > div:last-child {
+.animCircle > div:last-child {
     left: 50%;
 }
 
-.spinner div div {
-    width: 100%;
-    height: 100%;
+.animCircle div div {
+    width: 110%;
+    height: 110%;
+    width: 110%;
+    height: 110%;
+    top: -5%;
     opacity: 0;
-    background-color: white;
 
-    animation-duration: 3s; 
+    animation-duration: 0.5s; 
     animation-timing-function: linear;
 }
 
-.spinner div:first-child div {
+.animCircle div:first-child div {
     transform-origin: 100% 50%;
     animation-name: leftSpinRot;
+    background-color: white;
+    transform: rotate(0deg);
+    left: -10%;
 }
 @keyframes leftSpinRot {
     0%   { 
@@ -136,9 +171,11 @@ svg {
      }
 }
 
-.rightSpin div {
+.animCircle div:last-child div {
     transform-origin: 0% 50%;
     animation-name: rightSpinRot;
+    background-color: white;
+    transform: rotate(0deg);
 }
 @keyframes rightSpinRot {
     0%   { 

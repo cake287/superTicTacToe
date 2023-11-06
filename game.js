@@ -49,55 +49,21 @@ function boxClick(majorIndex, minorIndex) {
         
         let [gameWinner, lineStartIndex, lineEndIndex] = testGameWin(boxes[majorIndex].minors)
         if (gameWinner != " ") {
+            thisMajor.classList.add(gameWinner == "X" ? "cross" : "circle");
+
             thisMajor.dataset.value = gameWinner;
-            thisMajor.classList.add("gameOver");
+            thisMajor.classList.add("minigameOver");
 
 
 
             let line = document.createElement("div");
-            line.classList.add("gameOverLine");
+            line.classList.add("minigameOverLine");
+            line.dataset.startIndex = lineStartIndex;
+            line.dataset.endIndex = lineEndIndex;
             thisMajor.appendChild(line);
-            console.log(lineStartIndex + " " + lineEndIndex);
+            console.log(line);
 
-            let majorRect = thisMajor.getBoundingClientRect();
-            let startingRect = boxes[majorIndex].minors[lineStartIndex].getBoundingClientRect();
-
-            const lineOffset = 10; // pixels between edge of minor and start of line
-
-            line.style.left = "calc(" + (startingRect.left - majorRect.left + startingRect.width / 2 ) + "px - " 
-                  + getComputedStyle(line).width + " / 2 - " +
-                  getComputedStyle(thisMajor).borderLeftWidth + ")";
-
-            line.style.top = "calc(" + (startingRect.top - majorRect.top + lineOffset) + "px - " +
-                  getComputedStyle(thisMajor).borderTopWidth + ")";
-                  
-            let lineLength = 3*startingRect.height - 2*lineOffset;
-            let rot = 0;
-            switch (lineEndIndex - lineStartIndex) {
-                case 2: //horizontal
-                rot = -90;
-                break;
-
-                case 6: //vertical
-                break;
-
-                case 8: // top left - bottom right diagonal
-                rot = -45;
-                lineLength *= Math.sqrt(2);
-                break;
-
-                case 4: // top right - bottom left diagonal
-                rot = 45;
-                lineLength *= Math.sqrt(2);
-                break;
-            }
-
-            line.style.height = lineLength + "px";
-            
-            let orig = "calc(" + getComputedStyle(line).width + " / 2) " + (startingRect.height / 2 - 10) + "px";
-            console.log(orig);
-            line.style.transformOrigin = orig;
-            line.style.transform = "rotate(" + rot + "deg)";
+            reformatLine(line);
         }
         
 
@@ -127,6 +93,7 @@ function main() {
     for (let i = 0; i < 9; i++) {
         boxes.push({major: document.createElement("div"), minors: []});
         boxes[i].major.classList.add("majorBox");
+        boxes[i].major.dataset.index = i;
         gameContainer.appendChild(boxes[i].major);
 
         // top, right, bottom, left
@@ -141,7 +108,7 @@ function main() {
             [1, 1, 0, 1],
             [1, 0, 0, 1]
         ];
-        boxes[i].major.style.borderWidth = borderExists[i].map((exists) => (0.35*exists) + "em").join(" ");
+        boxes[i].major.style.borderWidth = borderExists[i].map((exists) => (5*exists) + "px").join(" ");
         boxes[i].major.dataset.value = " ";
 
         for (let j = 0; j < 9; j++) {
@@ -159,6 +126,51 @@ function main() {
     winResize();
 }
 
+function reformatLine(line) {
+    let majorBox = line.parentElement;
+    let majorIndex = parseInt(majorBox.dataset.index);
+    let lineStartIndex = parseInt(line.dataset.startIndex);
+    let lineEndIndex = parseInt(line.dataset.endIndex);
+    let majorRect = majorBox.getBoundingClientRect();
+    let startingRect = boxes[majorIndex].minors[lineStartIndex].getBoundingClientRect();
+
+    const lineOffset = 5; // pixels between edge of minor and start of line
+
+    line.style.left = "calc(" + (startingRect.left - majorRect.left + startingRect.width / 2 ) + "px - " 
+          + getComputedStyle(line).width + " / 2 - " +
+          getComputedStyle(majorBox).borderLeftWidth + ")";
+
+    line.style.top = "calc(" + (startingRect.top - majorRect.top + lineOffset) + "px - " +
+          getComputedStyle(majorBox).borderTopWidth + ")";
+          
+    let lineLength = 3*startingRect.height - 2*lineOffset;
+    let rot = 0;
+    switch (lineEndIndex - lineStartIndex) {
+        case 2: //horizontal
+        rot = -90;
+        break;
+
+        case 6: //vertical
+        break;
+
+        case 8: // top left - bottom right diagonal
+        rot = -45;
+        lineLength *= Math.sqrt(1.9);
+        break;
+
+        case 4: // top right - bottom left diagonal
+        rot = 45;
+        lineLength *= Math.sqrt(1.9);
+        break;
+    }
+
+    line.style.height = lineLength + "px";
+    
+    let orig = "calc(" + getComputedStyle(line).width + " / 2) " + (startingRect.height / 2 - lineOffset) + "px";
+    line.style.transformOrigin = orig;
+    line.style.transform = "rotate(" + rot + "deg)";
+}
+
 function winResize() {
     // presumably a better way to do scalable formatting . but it works. pain in the arse tho
 
@@ -166,7 +178,8 @@ function winResize() {
     for (const box of document.querySelectorAll(".majorBox")) {
         box.style.width = winSize * 0.18 + "px";
         box.style.height = winSize * 0.18 + "px";
-        box.style.padding = winSize * 0.03 + "px"
+        box.style.padding = winSize * 0.03 + "px";
+        box.style.fontSize = winSize * 0.17 + "px";
     }
 
     const minorSize = winSize * 0.06 + "px";
@@ -175,9 +188,11 @@ function winResize() {
         box.style.height = minorSize;
         box.style.lineHeight = minorSize;
         box.style.fontSize = winSize * 0.03 + "px";
-
     } 
 
+    for (const line of document.querySelectorAll(".minigameOverLine")) {
+        reformatLine(line);
+    }
 }
 
 

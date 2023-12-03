@@ -68,7 +68,7 @@ function printBoard(board) {
 }
 
 
-function evalBoard(board) {
+function evalBoard(board, thisMove) {
     // add score for: (descending order)
     // overral win
     // two small adjacent wins
@@ -114,6 +114,20 @@ function evalBoard(board) {
 }
 
 
-function successorBoards(board, majorToPlayIn) { // majorToPlayIn = -1 if we can play anywhere
-    
+function successorBoards(board, playableMajors, player) {
+    let succs = [];
+
+    for (const maj in playableMajors) {
+        for (let min = 0; min < 9; min++) {
+            if (board[maj][min] == 0) {
+                let newBoard = structuredClone(board);
+                newBoard[maj][min] = player;
+                newBoard[maj][9] = testWin(newBoard[maj]);
+                
+                succs.push(newBoard);
+            }
+        }
+    }
+
+    return succs;
 }

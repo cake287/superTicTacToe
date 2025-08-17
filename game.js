@@ -6,7 +6,6 @@ let isTurnCrosses = true;
 const crossChar = "\u2573";
 const circleChar = "\u25EF";
 
-
 // board is a list of boxes (major or minor) 
 // returns ["X", lineStartIndex, lineEndIndex], ["O", lineStartIndex, lineEndIndex] or [" "]
 function testGameWin(board) {
@@ -64,6 +63,7 @@ function boxClick(majorIndex, minorIndex) {
             line.dataset.startIndex = lineStartIndex;
             line.dataset.endIndex = lineEndIndex;
             thisMajor.appendChild(line);
+            console.log(line);
 
             reformatLine(line);
         }
@@ -89,8 +89,19 @@ function boxClick(majorIndex, minorIndex) {
         gc.add(isTurnCrosses ? "crossTurn" : "circleTurn");
 
         if (singleplayer) {
-            board = getCurrentBoard();
-            //printBoard(board);
+            let intBoard = [];
+            for (let maj = 0; maj < 9; maj++) {
+                intBoard[maj] = []
+                for (let min = 0; min < 9; min++) {
+                    let val = 0;
+                    if (boxes[maj].minors[min].dataset.value == "X")
+                        val = 1;
+                    else if (boxes[maj].minors[min].dataset.value == "O")
+                        val = -1;
+                    intBoard[maj][min] = val;
+                }
+            }
+            printBoard(intBoard);
         }
     }
 }

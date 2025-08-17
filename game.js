@@ -1,5 +1,3 @@
-let singleplayer = true;
-
 let boxes = [];
 let isTurnCrosses = true;
 
@@ -87,22 +85,6 @@ function boxClick(majorIndex, minorIndex) {
         let gc = document.getElementById("gameContainer").classList;
         gc.remove(isTurnCrosses ? "circleTurn" : "crossTurn");
         gc.add(isTurnCrosses ? "crossTurn" : "circleTurn");
-
-        if (singleplayer) {
-            let intBoard = [];
-            for (let maj = 0; maj < 9; maj++) {
-                intBoard[maj] = []
-                for (let min = 0; min < 9; min++) {
-                    let val = 0;
-                    if (boxes[maj].minors[min].dataset.value == "X")
-                        val = 1;
-                    else if (boxes[maj].minors[min].dataset.value == "O")
-                        val = -1;
-                    intBoard[maj][min] = val;
-                }
-            }
-            printBoard(intBoard);
-        }
     }
 }
 

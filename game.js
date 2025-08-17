@@ -68,6 +68,7 @@ function boxClick(majorIndex, minorIndex) {
             reformatLine(line);
         }
         
+
         return;
 
         // disabling mini games which the next player can't play in

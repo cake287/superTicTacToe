@@ -1,31 +1,28 @@
-let singleplayer = true;
-
 let boxes = [];
 let isTurnCrosses = true;
 
 const crossChar = "\u2573";
 const circleChar = "\u25EF";
 
-const winningArrangements =
-[
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-];
-
 // board is a list of boxes (major or minor) 
 // returns ["X", lineStartIndex, lineEndIndex], ["O", lineStartIndex, lineEndIndex] or [" "]
 function testGameWin(board) {
-    for (const arrangement of winningArrangements) {
-        let minorValues = arrangement.map(i => board[i].dataset.value);
+    const winningArrangements =
+    [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+    for (const arr of winningArrangements) {
+        let minorValues = arr.map(i => board[i].dataset.value);
         let allValuesSame = minorValues.every(v => v == minorValues[0]);
         if (allValuesSame && minorValues[0] != " ")
-            return [minorValues[0], arrangement[0], arrangement[2]];
+            return [minorValues[0], arr[0], arr[2]];
     }
     return [" "];
 }
@@ -64,13 +61,12 @@ function boxClick(majorIndex, minorIndex) {
             line.dataset.startIndex = lineStartIndex;
             line.dataset.endIndex = lineEndIndex;
             thisMajor.appendChild(line);
+            console.log(line);
 
             reformatLine(line);
         }
         
-        return;
 
-        // disabling mini games which the next player can't play in
         for (let i = 0; i < 9; i++) {
             // if we're pointed to a mini game which hasn't been won yet
             if (boxes[minorIndex].major.dataset.value == " ") 
@@ -89,11 +85,6 @@ function boxClick(majorIndex, minorIndex) {
         let gc = document.getElementById("gameContainer").classList;
         gc.remove(isTurnCrosses ? "circleTurn" : "crossTurn");
         gc.add(isTurnCrosses ? "crossTurn" : "circleTurn");
-
-        if (singleplayer) {
-            board = getCurrentBoard();
-            //printBoard(board);
-        }
     }
 }
 

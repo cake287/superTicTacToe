@@ -61,9 +61,17 @@ function boxClick(majorIndex, minorIndex) {
             line.dataset.startIndex = lineStartIndex;
             line.dataset.endIndex = lineEndIndex;
             thisMajor.appendChild(line);
-            console.log(line);
 
             reformatLine(line);
+
+
+            // test for victory over the whole game
+            let [gameWinner, lineStartIndex, lineEndIndex] = testGameWin(boxes.map(b => b.major));
+            if (gameWinner != " ") {
+                
+                gameContainer.classList.add("gameOver");
+            }
+
         }
         
 

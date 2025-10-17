@@ -46,10 +46,10 @@ body {
     grid-template-columns: auto auto auto;
 
 }
-.majorBox.disabled {
+#gameContainer:not(.gameOver) > .majorBox.disabled {
     opacity: 0.5;
 }
-.majorBox.minigameOver {
+#gameContainer:not(.gameOver) > .majorBox.minigameOver {
     opacity: 0.5;
 }
 

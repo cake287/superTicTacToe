@@ -33,15 +33,21 @@ namespace game {
     }
 
     MOVE_SET_T get_valid_moves(const STATE_T& state) {
-
         // valid minor boards are ones which have not been won yet (i.e. free cells in major board) 
         // and are available to play in (i.e. marked in state[10])
-        uint16_t valid_minor_boards = get_free_cells(state[9]) & state[10];
+        uint16_t valid_major_moves = get_free_cells(state[9]) & state[10];
 
-        std::array<uint16_t, 9> valid_moves;
-        for (int i = 0; i < 9; ++i) {
-            valid_moves[i] = get_free_cells(state[i]);
-            valid_moves[i] &= (valid_minor_boards & (1 << i)) ? 0x1FF : 0; // remove moves if minor board is not valid
+        std::array<float, 81> valid_moves;
+        for (int majorI = 0; majorI < 9; ++majorI) {
+            uint16_t valid_minor_moves = get_free_cells(state[majorI]);
+
+            for (int minorI = 0; minorI < 9; ++minorI) {
+                if ((valid_major_moves & (1 << majorI)) && (valid_minor_moves & (1 << minorI))) {
+                    valid_moves[majorI * 9 + minorI] = 1.0f;
+                } else {
+                    valid_moves[majorI * 9 + minorI] = 0.0f;
+                }
+            }
         }
 
         return valid_moves;
@@ -129,9 +135,8 @@ namespace game {
             for (int minor_row = 0; minor_row < 3; ++minor_row) {
                 for (int major_col = 0; major_col < 3; ++major_col) {
                     for (int minor_col = 0; minor_col < 3; ++minor_col) {
-                        uint16_t minor_board = valid_moves[major_row * 3 + major_col];
-                        uint16_t cell_mask = 1 << (minor_row * 3 + minor_col);
-                        if (minor_board & cell_mask) {
+                        int move_index = (major_row * 3 + major_col) * 9 + (minor_row * 3 + minor_col);
+                        if (valid_moves[move_index] > 0.0f) {
                             std::cout << "#";
                         } else {
                             std::cout << ".";

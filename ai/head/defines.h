@@ -6,7 +6,7 @@
 // a full game state is an array of 11 uint32_t. state[0:8] are the minor boards. state[9] is the major board. state[10] describes the minor boards which can be played on.
 
 #define STATE_T std::array<uint32_t, 11>
-#define MOVE_SET_T std::array<uint16_t, 9>
+#define MOVE_SET_T std::array<float, 81>
 
 
 

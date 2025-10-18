@@ -1,8 +1,9 @@
 #include "game.h"
+#include "mcts.h"
 #include <iostream>
 
-int main() {
-    STATE_T state = {0, 0, 0b110, 0, 0, 0, 0, 0, 0, 0, 0b111111111};
+void play_two_player_game() {
+    STATE_T state = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0b111111111};
     game::print_board(state);
 
     int player = 1;
@@ -17,7 +18,7 @@ int main() {
         int move = major_move * 9 + minor_move;
 
         MOVE_SET_T valid_moves = game::get_valid_moves(state);
-        if (!(valid_moves[major_move] & (1 << minor_move))) {
+        if (!valid_moves[major_move*9 + minor_move]) {
             std::cout << "Invalid move, try again." << std::endl;
             continue;
         }
@@ -28,6 +29,13 @@ int main() {
 
         player *= -1;
     }
+}
+
+
+int main() {
+    STATE_T state = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0b10};
+
+
 
     return 0;
 }

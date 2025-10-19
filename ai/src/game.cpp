@@ -42,18 +42,16 @@ namespace game {
             uint16_t valid_minor_moves = get_free_cells(state[majorI]);
 
             for (int minorI = 0; minorI < 9; ++minorI) {
-                if ((valid_major_moves & (1 << majorI)) && (valid_minor_moves & (1 << minorI))) {
-                    valid_moves[majorI * 9 + minorI] = 1.0f;
-                } else {
-                    valid_moves[majorI * 9 + minorI] = 0.0f;
-                }
+                valid_moves[majorI * 9 + minorI] = 
+                    ((valid_major_moves >> majorI) & 1) & 
+                    (((valid_minor_moves >> minorI) & 1)); // 1 for valid, 0 for not valid
             }
         }
 
         return valid_moves;
     }
 
-    STATE_T next_state(const STATE_T& state, int move, int player) {
+    STATE_T next_state(const STATE_T& state, signed char move, signed char player) {
         STATE_T new_state = state;
 
         int minor_board_index = move / 9;

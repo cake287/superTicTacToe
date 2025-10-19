@@ -59,7 +59,9 @@
                 "-o",
                 "ai/build/Debug/main.exe",
                 "ai/src/main.cpp",
-                "ai/src/game.cpp"
+                "ai/src/game.cpp",
+                "ai/src/mcts.cpp",
+                "ai/src/model.cpp",
             ],
             "group": {
                 "kind": "build",

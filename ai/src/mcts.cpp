@@ -1,6 +1,8 @@
 #include "mcts.h"
 #include "game.h"
 #include <iostream>
+#include <limits>
+#include <math.h>
 
 namespace MCTS {
 
@@ -33,22 +35,39 @@ namespace MCTS {
         // Normalize prior probabilities
         for (Node* child : children) {
             child->prior_probability /= valid_prob_sum;
-
-            std::cout << (int)child->action << ": " << child->prior_probability << std::endl;
+            // std::cout << (int)child->action << ": " << child->prior_probability << std::endl;
         }
         
-
         expanded = true;
     }
 
     Node* Node::select_child() {
-        // Placeholder for selection logic (e.g., UCT)
-        if (children.empty()) return nullptr;
-        return children[0]; // Simplified: always return the first child
-    }
+        // Select child with highest UCB score
 
-    bool Node::is_expanded() const {
-        return expanded;
+        float best_score = -std::numeric_limits<float>::max();
+        Node* best_child = nullptr;
+        for (Node* child : children) {
+            float score = ucb_score(*this, *child);
+            if (score > best_score) {
+                best_score = score;
+                best_child = child;
+            }
+        }
+
+        return best_child;
+    }
+    
+
+    float ucb_score(Node& parent, Node& child) {
+        float prior_score = child.prior_probability * sqrt(parent.visit_count) / (child.visit_count + 1);
+        float value_score;
+        if (child.visit_count > 0) {
+            value_score = -child.get_mean_value(); // value of the child state is from the perspective of the opposing player
+        } else {
+            value_score = 0;
+        }
+
+        return value_score + prior_score;
     }
 
 }

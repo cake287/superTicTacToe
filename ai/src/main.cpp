@@ -1,5 +1,6 @@
 #include "game.h"
 #include "mcts.h"
+#include "model.h"
 #include <iostream>
 
 void play_two_player_game() {
@@ -24,6 +25,7 @@ void play_two_player_game() {
         }
 
         state = game::next_state(state, move, player);
+        game::get_valid_moves(state);
 
         game::print_board(state);
 
@@ -33,8 +35,13 @@ void play_two_player_game() {
 
 
 int main() {
-    STATE_T state = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0b10};
+    STATE_T state = {0, 0b111111100, 0, 0, 0, 0, 0, 0, 0, 0, 0b10};
 
+    Model model = {};
+
+    MCTS::Node root_node(0.0f, -1);
+    float value = 0.0f;
+    root_node.expand(state, &value, model);
 
 
     return 0;

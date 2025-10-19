@@ -11,5 +11,5 @@ void Model::predict(const STATE_T& state, std::array<float, 81>* policy_output, 
 
     policy_output->fill(1.0f / 81.0f); // uniform distribution
 
-    *value_output = 0.0f; // neutral value
+    *value_output = 0.5f; // neutral value
 }
